@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+    />
+    <title>Emotion-Driven Music Visualizer</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Face API (browser build; no CommonJS) -->
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"
+    ></script>
+    <!-- Your app (ES module) -->
+    <script type="module" defer src="script.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎵 Emotion-Driven Music Visualizer 🎵</h1>
+
+      <button id="startBtn" class="primary">
+        Start (Enable Camera & Audio)
+      </button>
+
+      <div class="stage">
+        <video
+          id="video"
+          autoplay
+          muted
+          playsinline
+          width="300"
+          height="300"
+        ></video>
+        <canvas id="overlay" width="300" height="300"></canvas>
+      </div>
+
+      <div class="emotion-display" id="emotion-display">Click Start</div>
+
+      <div class="controls">
+        <button id="changeSongBtn" class="secondary">Change Song</button>
+
+        <label>
+          Test Mood:
+          <select id="testMood">
+            <option value="auto" selected>Auto (from face)</option>
+            <option value="happy">happy → party</option>
+            <option value="sad">sad → sad</option>
+            <option value="angry">angry → item</option>
+            <option value="neutral">neutral → love</option>
+            <option value="surprised">surprised → mass</option>
+            <option value="disgusted">disgusted → instrumental</option>
+            <option value="fearful">fearful → romantic</option>
+          </select>
+        </label>
+
+        <label>
+          Language:
+          <select id="languageSelect">
+            <option value="english">English</option>
+<option value="bengali">Bengali</option>
+<option value="bhojpuri">Bhojpuri</option>
+<option value="gujarati">Gujarati</option>
+<option value="hindi">Hindi</option>
+<option value="kannada">Kannada</option>
+<option value="malayalam">Malayalam</option>
+<option value="marathi">Marathi</option>
+<option value="punjabi">Punjabi</option>
+<option value="tamil">Tamil</option>
+<option value="telugu">Telugu</option>
+<option value="urdu">Urdu</option>
+<option value="arabic">Arabic</option>
+<option value="chinese">Chinese</option>
+<option value="french">French</option>
+<option value="german">German</option>
+<option value="japanese">Japanese</option>
+<option value="russian">Russian</option>
+<option value="spanish">Spanish</option>
+
+          </select>
+        </label>
+      </div>
+
+      <audio id="musicPlayer" controls></audio>
+      <canvas id="visualizer" width="640" height="150"></canvas>
+
+      <p class="hint">
+        If camera fails or models aren’t present, choose a test mood to play
+        music anyway.
+      </p>
+    </div>
+  </body>
+</html>
+
