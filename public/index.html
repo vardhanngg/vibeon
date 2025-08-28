@@ -2,37 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <title>Emotion-Driven Music Visualizer</title>
     <link rel="stylesheet" href="style.css" />
-    <!-- Face API (browser build; no CommonJS) -->
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"
-    ></script>
-    <!-- Your app (ES module) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
     <script type="module" defer src="script.js"></script>
   </head>
   <body>
+    <!-- Modal -->
+    <div id="devModal" class="modal">
+      <div class="modal-content">
+        <span id="closeBtn" class="close">&times;</span>
+        <h2>Still Developing</h2>
+        <p>Forgive any inconveniences. We're working hard to improve the experience!</p>
+      </div>
+    </div>
+
     <div class="container">
       <h1>🎵 Emotion-Driven Music Visualizer 🎵</h1>
-
-      <button id="startBtn" class="primary">
-        Start (Enable Camera & Audio)
-      </button>
+      <button id="startBtn" class="primary">Start (Enable Camera & Audio)</button>
 
       <div class="stage">
-        <video
-          id="video"
-          autoplay
-          muted
-          playsinline
-          width="300"
-          height="300"
-        ></video>
+        <video id="video" autoplay muted playsinline width="300" height="300"></video>
         <canvas id="overlay" width="300" height="300"></canvas>
       </div>
 
@@ -59,13 +50,13 @@
           Language:
           <select id="languageSelect">
             <option value="english">English</option>
-<option value="hindi">Hindi</option>
-<option value="kannada">Kannada</option>
-<option value="malayalam">Malayalam</option>
-<option value="marathi">Marathi</option>
-<option value="punjabi">Punjabi</option>
-<option value="tamil">Tamil</option>
-<option value="telugu">Telugu</option>
+            <option value="hindi">Hindi</option>
+            <option value="kannada">Kannada</option>
+            <option value="malayalam">Malayalam</option>
+            <option value="marathi">Marathi</option>
+            <option value="punjabi">Punjabi</option>
+            <option value="tamil">Tamil</option>
+            <option value="telugu">Telugu</option>
           </select>
         </label>
       </div>
@@ -73,11 +64,26 @@
       <audio id="musicPlayer" controls></audio>
       <canvas id="visualizer" width="640" height="150"></canvas>
 
-      <p class="hint">
-        If camera fails or models aren’t present, choose a test mood to play
-        music anyway.
-        Regret the inconvenience. Working hard to improve the experience!
-      </p>
+      <p class="hint">If camera fails or models aren’t present, choose a test mood to play music anyway.</p>
     </div>
+
+    <script>
+      var modal = document.getElementById('devModal');
+      var closeBtn = document.getElementById('closeBtn');
+
+      window.onload = function() {
+        modal.style.display = 'block';
+      };
+
+      closeBtn.onclick = function() {
+        modal.style.display = 'none';
+      };
+
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      };
+    </script>
   </body>
-</html> i want to add a [pop up when site is opened that says still developing forgiveer inconvinences
+</html>
