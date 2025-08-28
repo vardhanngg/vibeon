@@ -16,7 +16,7 @@ let faceApiModelsLoaded = false;
 // Simplified emotion map with mood templates
 const emotionMap = {
   happy: '{lang} party songs',
-  sad: '{lang} breakup songs',
+  sad: '{lang} sad songs',
   angry: '{lang} item songs',
   neutral: '{lang} love songs',
   surprised: '{lang} mass songs',
@@ -62,12 +62,12 @@ async function detectMoodFromFace() {
 
     if (detections.length > 0) {
       const expressions = detections[0].expressions;
-      // Find the dominant expression
       const maxExpression = Object.keys(expressions).reduce((a, b) =>
         expressions[a] > expressions[b] ? a : b
       );
       detectedMood = maxExpression;
-      emotionDisplay.textContent = `Detected mood: ${detectedMood}`;
+     emotionDisplay.textContent = `Detected mood: ${detectedMood}`;
+
     } else {
       emotionDisplay.textContent = 'No face detected.';
     }
@@ -80,66 +80,58 @@ async function detectMoodFromFace() {
 async function fetchSongByMood() {
   let mood = testMoodSelect.value;
   const language = languageSelect.value || 'english';
-
   if (mood === 'auto') {
     mood = detectedMood;
   }
-
   if (!mood || mood === 'auto' || !emotionMap[mood]) {
     emotionDisplay.textContent = 'Please select a valid mood or wait for detection.';
     return;
   }
-
-  // Replace `{lang}` with the selected language in the song genre query
   const query = emotionMap[mood].replace('{lang}', language);
-  emotionDisplay.textContent = `Searching for: ${query}`;
-
+  emotionDisplay.textContent = "Finding You the best song...";
   try {
     const response = await fetch(`/api/songByMood?mood=${encodeURIComponent(query)}`);
+    if (!response.ok) {
+      const text = await response.text();
+      console.error(`[client] API error: ${text}`);
+      emotionDisplay.textContent = text.includes('No valid playlists found')
+        ? `No songs found for ${query}. Try another mood or language.`
+        : `Failed to fetch song: ${text}`;
+      return;
+    }
     const data = await response.json();
-
     if (!data.songs || data.songs.results.length === 0) {
       emotionDisplay.textContent = 'No songs found for this mood and language.';
       return;
     }
-
     const songs = data.songs.results;
-
-    // Pick a random song from the array
-    let randomIndex;
-    let song;
-    let audioUrl;
-
-    // Pick a new song, not previously played
+    let song, audioUrl;
+    let attempts = 0;
+    const maxAttempts = songs.length * 2;
     do {
-      randomIndex = Math.floor(Math.random() * songs.length);
+      const randomIndex = Math.floor(Math.random() * songs.length);
       song = songs[randomIndex];
       audioUrl = song.audioUrl;
-
-      // Check if this song was already played (by comparing ID and Audio URL)
-    } while (song.id === lastPlayedSongId || audioUrl === lastPlayedAudioUrl);
-
+      attempts++;
+    } while (
+      (song.id === lastPlayedSongId || audioUrl === lastPlayedAudioUrl) &&
+      attempts < maxAttempts
+    );
     if (!audioUrl) {
       emotionDisplay.textContent = 'No playable audio found.';
       return;
     }
-
-    // Play the song
     musicPlayer.src = audioUrl;
     musicPlayer.play();
-
     emotionDisplay.textContent = `Playing: ${song.title} by ${song.artist}`;
 
-    // Cache the last played song's ID and audio URL
     lastPlayedSongId = song.id;
     lastPlayedAudioUrl = audioUrl;
-
   } catch (error) {
-    console.error('Error fetching song:', error);
-    emotionDisplay.textContent = 'Failed to fetch song.';
+    console.error('[client] Error fetching song:', error.message);
+    emotionDisplay.textContent = `Failed to fetch song: ${error.message}`;
   }
 }
-
 // Setup event listeners
 startBtn.addEventListener('click', async () => {
   await loadFaceApiModels();
@@ -152,4 +144,9 @@ startBtn.addEventListener('click', async () => {
 changeSongBtn.addEventListener('click', fetchSongByMood);
 testMoodSelect.addEventListener('change', fetchSongByMood);
 languageSelect.addEventListener('change', fetchSongByMood);
+
+// Auto-play next song when current one ends
+musicPlayer.addEventListener('ended', () => {
+  fetchSongByMood();
+});
 

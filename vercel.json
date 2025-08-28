@@ -12,8 +12,12 @@
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/$1.js"
+      "src": "/api/songByMood",
+      "dest": "/api/songByMood.js"
+    },
+    {
+      "src": "/api/search",
+      "dest": "/api/search.js"
     },
     {
       "src": "/(.*)",
