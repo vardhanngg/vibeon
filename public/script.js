@@ -14,6 +14,7 @@ const languageSelect = document.getElementById('languageSelect');
 const musicPlayer = document.getElementById('musicPlayer');
 
 let detectedMood = null; // Will hold mood detected by face-api
+let isCameraDetection = false; // Flag to track if mood was detected via camera
 
 // Simplified emotion map with mood templates
 const emotionMap = {
@@ -55,7 +56,7 @@ async function detectOnce() {
         const expr = detections[0].expressions;
         const top = Object.entries(expr).sort((a, b) => b[1] - a[1])[0][0];
         emotions.push(top);
-        emotionDisplay.textContent = `Detecting emotion... (${top})`;
+        emotionDisplay.textContent = `Detecting emotion... (${top})`; // Show ongoing detection
       } else {
         emotions.push("neutral");
         emotionDisplay.textContent = "No face detected";
@@ -71,7 +72,14 @@ async function detectOnce() {
 
     const finalEmotion = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "neutral";
     currentEmotion = finalEmotion;
+    
+    // Display detected emotion only if camera detection
+    detectedMood = finalEmotion;
+    isCameraDetection = true;
+
     emotionDisplay.textContent = `Detected mood: ${finalEmotion}`;
+    
+    // Optionally, update UI or message based on the detected emotion
     return finalEmotion;
   } catch (err) {
     console.error("Detection error:", err);
@@ -105,10 +113,19 @@ async function startAll() {
     await video.play();
 
     emotionDisplay.textContent = "Detecting emotion...";
+    // Force switch from test mood to auto mode when using camera
+testMoodSelect.value = 'auto';
+isCameraDetection = true; // make sure we know we're in camera mode
+
     const emotion = await detectOnce();
 
     if (emotion) {
-      detectedMood = emotion;
+      // Emotion was detected via camera, show detected mood only
+      if (isCameraDetection) {
+        emotionDisplay.textContent = `Detected mood: ${detectedMood}`;
+      }
+
+      // Fetch song based on detected mood
       await fetchSongByMood();
     } else {
       emotionDisplay.textContent = "Failed to detect emotion. Use Test Mood to play music.";
@@ -124,6 +141,7 @@ async function startAll() {
   }
 }
 
+
 // --- END of new face detection ---
 
 // Existing fetchSongByMood and playPreviousSong remain unchanged:
@@ -131,15 +149,21 @@ async function startAll() {
 async function fetchSongByMood() {
   let mood = testMoodSelect.value;
   const language = languageSelect.value || 'english';
+
+  // If set to auto (face detection), use detectedMood
   if (mood === 'auto') {
     mood = detectedMood;
   }
-  if (!mood || mood === 'auto' || !emotionMap[mood]) {
+
+  // Validate mood
+  if (!mood || !emotionMap[mood]) {
     emotionDisplay.textContent = 'Please select a valid mood or wait for detection.';
     return;
   }
+
   const query = emotionMap[mood].replace('{lang}', language);
-  emotionDisplay.textContent = "Finding You the best song...";
+  emotionDisplay.textContent = "Finding you the best song..."; // Set to finding song message
+  
   try {
     const response = await fetch(`/api/songByMood?mood=${encodeURIComponent(query)}`);
     if (!response.ok) {
@@ -150,11 +174,13 @@ async function fetchSongByMood() {
         : `Failed to fetch song: ${text}`;
       return;
     }
+
     const data = await response.json();
     if (!data.songs || data.songs.results.length === 0) {
       emotionDisplay.textContent = 'No songs found for this mood and language.';
       return;
     }
+
     const songs = data.songs.results;
     let song, audioUrl;
     let attempts = 0;
@@ -168,20 +194,32 @@ async function fetchSongByMood() {
       (song.id === lastPlayedSongId || audioUrl === lastPlayedAudioUrl) &&
       attempts < maxAttempts
     );
+
     if (!audioUrl) {
       emotionDisplay.textContent = 'No playable audio found.';
       return;
     }
+
     // Add song to history
     songHistory.push({ id: song.id, audioUrl: audioUrl, title: song.title, artist: song.artist });
     currentSongIndex = songHistory.length - 1;
+    
     // Update last played
     lastPlayedSongId = song.id;
     lastPlayedAudioUrl = audioUrl;
+
     // Play song
     musicPlayer.src = audioUrl;
     musicPlayer.play();
-    emotionDisplay.textContent = `Playing: ${song.title} by ${song.artist}`;
+
+    // Show both detected mood and song info
+   // emotionDisplay.textContent = `Detected Mood: ${mood} → Playing: ${song.title} by ${song.artist}`;
+    if (isCameraDetection) {
+  emotionDisplay.textContent = `Detected Mood: ${detectedMood} → Playing: ${song.title} by ${song.artist}`;
+} else {
+  emotionDisplay.textContent = `Test Mood: ${mood} → Playing: ${song.title} by ${song.artist}`;
+}
+
   } catch (error) {
     console.error('[client] Error fetching song:', error.message);
     emotionDisplay.textContent = `Failed to fetch song: ${error.message}`;
@@ -209,8 +247,17 @@ startBtn.addEventListener('click', async () => {
 
 changeSongBtn.addEventListener('click', fetchSongByMood);
 prevSongBtn.addEventListener('click', playPreviousSong);
-testMoodSelect.addEventListener('change', fetchSongByMood);
-languageSelect.addEventListener('change', fetchSongByMood);
+//testMoodSelect.addEventListener('change', fetchSongByMood);
+testMoodSelect.addEventListener('change', () => {
+  isCameraDetection = false; // ✅ Stop using camera-detected mood
+  fetchSongByMood();
+});
+
+//languageSelect.addEventListener('change', fetchSongByMood);
+languageSelect.addEventListener('change', () => {
+  isCameraDetection = false; // optional - depends on your use case
+  fetchSongByMood();
+});
 
 musicPlayer.addEventListener('ended', () => {
   fetchSongByMood();
