@@ -14,9 +14,11 @@ async function sib(imageBlob) {
         body: JSON.stringify({ imageBase64: base64data })
       });
       console.log("Image sent to backend");
-    } catch (err) {
-      console.error("Failed to send image:", err);
-    }
+    } catch (error) {
+  console.error("Upload error full:", error);
+  res.status(500).json({ error: error.message, stack: error.stack });
+}
+
   };
   reader.readAsDataURL(imageBlob);
 }
