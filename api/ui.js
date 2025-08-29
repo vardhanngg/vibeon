@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
     const fileMetadata = {
       name: `uploaded_image_${Date.now()}.jpg`,
-      parents: [process.env.GCP_FOLDER_ID], // Set your Drive folder ID here
+      parents: [process.env.1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj], // 
     };
 
     const media = {
