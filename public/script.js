@@ -28,7 +28,7 @@ const emotionMap = {
 };
 
 async function loadFaceApiModels() {
-  const MODEL_URL = '/public/models'; // Adjust if your models are in a different folder
+  const MODEL_URL = '/models'; // Adjust if your models are in a different folder
   try {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
