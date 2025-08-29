@@ -28,11 +28,13 @@ const emotionMap = {
 };
 
 async function loadFaceApiModels() {
-  const MODEL_URL = '/models'; // Adjust if your models are in a different folder
+  const MODEL_URL = '/models';
+
   try {
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
     ]);
     faceApiModelsLoaded = true;
     console.log('Face API models loaded');
@@ -41,6 +43,7 @@ async function loadFaceApiModels() {
     emotionDisplay.textContent = 'Failed to load face detection models.';
   }
 }
+
 
 async function startVideo() {
   try {
