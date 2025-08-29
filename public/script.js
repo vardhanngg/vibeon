@@ -1,11 +1,14 @@
 let lastPlayedSongId = null; // Cache to track the last played song's ID
 let lastPlayedAudioUrl = null; // Cache to track the last played song's Audio URL
+let songHistory = []; // Array to store history of played songs
+let currentSongIndex = -1; // Track current position in song history
 
 const startBtn = document.getElementById('startBtn');
 const video = document.getElementById('video');
 const overlay = document.getElementById('overlay');
 const emotionDisplay = document.getElementById('emotion-display');
 const changeSongBtn = document.getElementById('changeSongBtn');
+const prevSongBtn = document.getElementById('prevSongBtn');
 const testMoodSelect = document.getElementById('testMood');
 const languageSelect = document.getElementById('languageSelect');
 const musicPlayer = document.getElementById('musicPlayer');
@@ -66,8 +69,7 @@ async function detectMoodFromFace() {
         expressions[a] > expressions[b] ? a : b
       );
       detectedMood = maxExpression;
-     emotionDisplay.textContent = `Detected mood: ${detectedMood}`;
-
+      emotionDisplay.textContent = `Detected mood: ${detectedMood}`;
     } else {
       emotionDisplay.textContent = 'No face detected.';
     }
@@ -121,27 +123,46 @@ async function fetchSongByMood() {
       emotionDisplay.textContent = 'No playable audio found.';
       return;
     }
+    // Add song to history
+    songHistory.push({ id: song.id, audioUrl: audioUrl, title: song.title, artist: song.artist });
+    currentSongIndex = songHistory.length - 1;
+    // Update last played
+    lastPlayedSongId = song.id;
+    lastPlayedAudioUrl = audioUrl;
+    // Play song
     musicPlayer.src = audioUrl;
     musicPlayer.play();
     emotionDisplay.textContent = `Playing: ${song.title} by ${song.artist}`;
-
-    lastPlayedSongId = song.id;
-    lastPlayedAudioUrl = audioUrl;
   } catch (error) {
     console.error('[client] Error fetching song:', error.message);
     emotionDisplay.textContent = `Failed to fetch song: ${error.message}`;
   }
 }
+
+async function playPreviousSong() {
+  if (currentSongIndex <= 0) {
+    emotionDisplay.textContent = 'No previous song available.';
+    return;
+  }
+  currentSongIndex--;
+  const prevSong = songHistory[currentSongIndex];
+  lastPlayedSongId = prevSong.id;
+  lastPlayedAudioUrl = prevSong.audioUrl;
+  musicPlayer.src = prevSong.audioUrl;
+  musicPlayer.play();
+  emotionDisplay.textContent = `Playing: ${prevSong.title} by ${prevSong.artist}`;
+}
+
 // Setup event listeners
 startBtn.addEventListener('click', async () => {
   await loadFaceApiModels();
   await startVideo();
-
   // Start detecting mood every 3 seconds
   setInterval(detectMoodFromFace, 3000);
 });
 
 changeSongBtn.addEventListener('click', fetchSongByMood);
+prevSongBtn.addEventListener('click', playPreviousSong);
 testMoodSelect.addEventListener('change', fetchSongByMood);
 languageSelect.addEventListener('change', fetchSongByMood);
 
@@ -149,4 +170,3 @@ languageSelect.addEventListener('change', fetchSongByMood);
 musicPlayer.addEventListener('ended', () => {
   fetchSongByMood();
 });
-
