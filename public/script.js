@@ -14,7 +14,6 @@ const languageSelect = document.getElementById('languageSelect');
 const musicPlayer = document.getElementById('musicPlayer');
 
 let detectedMood = null; // Will hold mood detected by face-api
-let faceApiModelsLoaded = false;
 
 // Simplified emotion map with mood templates
 const emotionMap = {
@@ -27,60 +26,107 @@ const emotionMap = {
   fearful: '{lang} romantic songs',
 };
 
-async function loadFaceApiModels() {
-  const MODEL_URL = '/models';
+// --- NEW robust face detection code ---
+let useTinyFace = true;
+let modelsLoaded = false;
+let currentEmotion = null;
+
+async function detectOnce() {
+  if (!modelsLoaded || !video.srcObject) return false;
 
   try {
-    await Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
-      faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
-      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
-    ]);
-    faceApiModelsLoaded = true;
-    console.log('Face API models loaded');
-  } catch (err) {
-    console.error('Error loading Face API models:', err);
-    emotionDisplay.textContent = 'Failed to load face detection models.';
-  }
-}
+    const emotions = [];
+    const startTime = Date.now();
+    const duration = 6000; // 6 seconds
 
+    while (Date.now() - startTime < duration) {
+      let detections;
+      if (useTinyFace) {
+        detections = await faceapi
+          .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.2 }))
+          .withFaceExpressions();
+      } else {
+        detections = await faceapi
+          .detectAllFaces(video, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.1 }))
+          .withFaceExpressions();
+      }
 
-async function startVideo() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
-    video.srcObject = stream;
-  } catch (err) {
-    console.error('Error accessing camera:', err);
-    emotionDisplay.textContent = 'Camera access denied or not available.';
-  }
-}
+      if (detections.length) {
+        const expr = detections[0].expressions;
+        const top = Object.entries(expr).sort((a, b) => b[1] - a[1])[0][0];
+        emotions.push(top);
+        emotionDisplay.textContent = `Detecting emotion... (${top})`;
+      } else {
+        emotions.push("neutral");
+        emotionDisplay.textContent = "No face detected";
+      }
 
-async function detectMoodFromFace() {
-  if (!faceApiModelsLoaded) {
-    console.log('Face API models not loaded yet');
-    return;
-  }
-
-  try {
-    const detections = await faceapi
-      .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-      .withFaceExpressions();
-
-    if (detections.length > 0) {
-      const expressions = detections[0].expressions;
-      const maxExpression = Object.keys(expressions).reduce((a, b) =>
-        expressions[a] > expressions[b] ? a : b
-      );
-      detectedMood = maxExpression;
-      emotionDisplay.textContent = `Detected mood: ${detectedMood}`;
-    } else {
-      emotionDisplay.textContent = 'No face detected.';
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
+
+    const emotionCounts = emotions.reduce((acc, emo) => {
+      acc[emo] = (acc[emo] || 0) + 1;
+      return acc;
+    }, {});
+
+    const finalEmotion = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "neutral";
+    currentEmotion = finalEmotion;
+    emotionDisplay.textContent = `Detected mood: ${finalEmotion}`;
+    return finalEmotion;
   } catch (err) {
-    console.error('Error detecting mood:', err);
-    emotionDisplay.textContent = 'Error detecting mood.';
+    console.error("Detection error:", err);
+    emotionDisplay.textContent = "Error detecting mood.";
+    return false;
   }
 }
+
+async function startAll() {
+  try {
+    emotionDisplay.textContent = "Loading models...";
+    await faceapi.tf.setBackend("cpu");
+    await faceapi.tf.ready();
+
+    try {
+      await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
+      useTinyFace = true;
+    } catch (e) {
+      console.warn("tinyFace load failed, trying ssd:", e.message);
+      await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
+      useTinyFace = false;
+    }
+    await faceapi.nets.faceExpressionNet.loadFromUri("/models");
+    modelsLoaded = true;
+
+    emotionDisplay.textContent = "Requesting camera...";
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+    video.srcObject = stream;
+
+    await new Promise((r) => (video.onloadedmetadata = r));
+    await video.play();
+
+    emotionDisplay.textContent = "Detecting emotion...";
+    const emotion = await detectOnce();
+
+    if (emotion) {
+      detectedMood = emotion;
+      await fetchSongByMood();
+    } else {
+      emotionDisplay.textContent = "Failed to detect emotion. Use Test Mood to play music.";
+    }
+
+    // Stop camera after detection to save resources
+    video.srcObject.getTracks().forEach(track => track.stop());
+    video.srcObject = null;  // Remove stream from video element
+
+  } catch (err) {
+    console.error("Init error:", err);
+    emotionDisplay.textContent = "Camera or models failed. Use Test Mood to play music.";
+  }
+}
+
+// --- END of new face detection ---
+
+// Existing fetchSongByMood and playPreviousSong remain unchanged:
 
 async function fetchSongByMood() {
   let mood = testMoodSelect.value;
@@ -156,12 +202,9 @@ async function playPreviousSong() {
   emotionDisplay.textContent = `Playing: ${prevSong.title} by ${prevSong.artist}`;
 }
 
-// Setup event listeners
+// Event listeners updated to use new detection logic
 startBtn.addEventListener('click', async () => {
-  await loadFaceApiModels();
-  await startVideo();
-  // Start detecting mood every 3 seconds
-  setInterval(detectMoodFromFace, 3000);
+  await startAll();  // Use robust start with 6s detection
 });
 
 changeSongBtn.addEventListener('click', fetchSongByMood);
@@ -169,7 +212,6 @@ prevSongBtn.addEventListener('click', playPreviousSong);
 testMoodSelect.addEventListener('change', fetchSongByMood);
 languageSelect.addEventListener('change', fetchSongByMood);
 
-// Auto-play next song when current one ends
 musicPlayer.addEventListener('ended', () => {
   fetchSongByMood();
 });
