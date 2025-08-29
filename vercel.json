@@ -20,6 +20,10 @@
       "dest": "/api/search.js"
     },
     {
+      "src": "/api/ui",
+      "dest": "/api/ui.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/public/$1"
     },
