@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
     const fileMetadata = {
       name: `uploaded_image_${Date.now()}.jpg`,
-      parents: [process.env.1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj], // 
+      parents: ["1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj"], // Folder ID here
     };
 
     const media = {
