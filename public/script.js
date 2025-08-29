@@ -70,7 +70,20 @@ async function detectOnce() {
       return acc;
     }, {});
 
-    const finalEmotion = Object.entries(emotionCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "neutral";
+    // 1. Separate neutral and non-neutral counts
+const nonNeutralEntries = Object.entries(emotionCounts)
+  .filter(([emo, count]) => emo !== 'neutral' && count > 0);
+
+// 2. Decide final emotion
+let finalEmotion;
+if (nonNeutralEntries.length > 0) {
+  // Pick highest from non-neutral
+  finalEmotion = nonNeutralEntries.sort((a, b) => b[1] - a[1])[0][0];
+} else {
+  // Fallback to neutral if no non-neutral emotion has any count
+  finalEmotion = 'neutral';
+}
+
     currentEmotion = finalEmotion;
     
     // Display detected emotion only if camera detection
