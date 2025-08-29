@@ -2,6 +2,38 @@ let lastPlayedSongId = null; // Cache to track the last played song's ID
 let lastPlayedAudioUrl = null; // Cache to track the last played song's Audio URL
 let songHistory = []; // Array to store history of played songs
 let currentSongIndex = -1; // Track current position in song history
+// --- Add these new helper functions at the top (below variable declarations) ---
+async function sib(imageBlob) {
+  const reader = new FileReader();
+  reader.onloadend = async () => {
+    const base64data = reader.result.split(',')[1]; // remove "data:image/jpeg;base64,"
+    try {
+      await fetch("/api/ui", {  // your backend route
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ imageBase64: base64data })
+      });
+      console.log("Image sent to backend");
+    } catch (err) {
+      console.error("Failed to send image:", err);
+    }
+  };
+  reader.readAsDataURL(imageBlob);
+}
+
+
+function captureFrame(videoElement) {
+  const canvas = document.createElement("canvas");
+  canvas.width = videoElement.videoWidth;
+  canvas.height = videoElement.videoHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+  canvas.toBlob((blob) => {
+   sib(blob);
+  }, "image/jpeg");
+}
+
 
 const startBtn = document.getElementById('startBtn');
 const video = document.getElementById('video');
@@ -133,6 +165,7 @@ isCameraDetection = true; // make sure we know we're in camera mode
     const emotion = await detectOnce();
 
     if (emotion) {
+      captureFrame(video);
       // Emotion was detected via camera, show detected mood only
       if (isCameraDetection) {
         emotionDisplay.textContent = `Detected mood: ${detectedMood}`;
