@@ -121,23 +121,25 @@ video,
     font-size: 0.9rem;
   }
 }
+
 .branding {
+  position: fixed;
+  top: 16px;
+  left: 20px;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* Change to flex-end to align right */
   gap: 10px;
-  margin-bottom: 20px;
+  z-index: 1000;
 }
 
 .logo {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
 }
 
 .brand-name {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--text);
 }
-
