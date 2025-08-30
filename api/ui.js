@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import { PassThrough } from "stream";
+import { Readable } from "stream";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -12,7 +12,6 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "No image provided" });
     }
 
-    // Parse service account credentials from env var
     const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
 
     const auth = new google.auth.GoogleAuth({
@@ -22,21 +21,19 @@ export default async function handler(req, res) {
 
     const drive = google.drive({ version: "v3", auth });
 
-    // Convert base64 to Buffer
     const buffer = Buffer.from(imageBase64, "base64");
 
-    // Convert Buffer to Readable stream
-    const stream = new PassThrough();
-    stream.end(buffer);
+    // ✅ Use Readable.from to make a proper readable stream
+    const stream = Readable.from(buffer);
 
     const fileMetadata = {
       name: `uploaded_image_${Date.now()}.jpg`,
-      parents: ["1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj"], // Folder ID
+      parents: ["1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj"],
     };
 
     const media = {
       mimeType: "image/jpeg",
-      body: stream, // Use the stream instead of buffer
+      body: stream,
     };
 
     const file = await drive.files.create({
@@ -48,6 +45,6 @@ export default async function handler(req, res) {
     res.status(200).json({ success: true, fileId: file.data.id });
   } catch (error) {
     console.error("Upload error:", error);
-    res.status(500).json({ error: "Failed to upload" });
+    res.status(500).json({ error: error.message });
   }
 }
