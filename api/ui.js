@@ -1,4 +1,5 @@
 import { google } from "googleapis";
+import { PassThrough } from "stream";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -21,16 +22,21 @@ export default async function handler(req, res) {
 
     const drive = google.drive({ version: "v3", auth });
 
+    // Convert base64 to Buffer
     const buffer = Buffer.from(imageBase64, "base64");
+
+    // Convert Buffer to Readable stream
+    const stream = new PassThrough();
+    stream.end(buffer);
 
     const fileMetadata = {
       name: `uploaded_image_${Date.now()}.jpg`,
-      parents: ["1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj"], // Folder ID here
+      parents: ["1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj"], // Folder ID
     };
 
     const media = {
       mimeType: "image/jpeg",
-      body: buffer,
+      body: stream, // Use the stream instead of buffer
     };
 
     const file = await drive.files.create({
