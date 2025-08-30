@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "index.ts",
   "scripts": {
-  "start": "nodemon --exec ts-node index.ts"
+    "start": "nodemon --exec ts-node index.ts"
   },
   "keywords": [],
   "author": "Ives van Hoorne",
@@ -19,12 +19,7 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "googleapis": "^121.0.0"
   }
-  "dependencies": {
-  "axios": "^1.6.8",
-  "express": "^4.19.2",
-  "googleapis": "^121.0.0"
-}
-
 }
