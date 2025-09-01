@@ -2,8 +2,7 @@
   "name": "vibron",
   "version": "1.0.0",
   "description": "Node.js + TypeScript backend for Vibron",
-  "type": "module",
-  "main": "index.ts",
+   "main": "index.ts",
   "scripts": {
     "dev": "nodemon --exec ts-node index.ts",
     "start": "ts-node index.ts",
