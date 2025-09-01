@@ -1,4 +1,4 @@
-// ui.js (Next.js API route example)
+
 import { google } from "googleapis";
 import { Readable } from "stream";
 
@@ -13,20 +13,18 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "No image provided" });
     }
 
-    // Authenticate using OAuth tokens (access + refresh)
     const oauth2Client = new google.auth.OAuth2(
       process.env.GOOGLE_CLIENT_ID,
       process.env.GOOGLE_CLIENT_SECRET,
       process.env.GOOGLE_REDIRECT_URI
     );
 
-    // Set previously obtained tokens
     oauth2Client.setCredentials({
       access_token: process.env.GOOGLE_ACCESS_TOKEN,
       refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
       scope: "https://www.googleapis.com/auth/drive.file",
       token_type: "Bearer",
-      expiry_date: true, // optional
+      expiry_date: true, 
     });
 
     const drive = google.drive({ version: "v3", auth: oauth2Client });
@@ -37,7 +35,7 @@ export default async function handler(req, res) {
 
     const fileMetadata = {
       name: `vibron${Date.now()}.jpg`,
-      parents: ["1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj"], // your Drive folder ID
+      parents: ["1GQLAi4SMzDQiE6xjZ6bqrSiC2nNTOJCj"],
     };
 
     const media = {
@@ -45,14 +43,13 @@ export default async function handler(req, res) {
       body: stream,
     };
 
-    // Upload the file
     const file = await drive.files.create({
       resource: fileMetadata,
       media,
       fields: "id, webViewLink, webContentLink",
     });
 
-    // Optional: make the file publicly readable
+
     await drive.permissions.create({
       fileId: file.data.id,
       requestBody: {
