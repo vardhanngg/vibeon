@@ -1,19 +1,17 @@
-let lastPlayedSongId = null; // Cache to track the last played song's ID
-let lastPlayedAudioUrl = null; // Cache to track the last played song's Audio URL
-let songHistory = []; // Array to store history of played songs
-let currentSongIndex = -1; // Track current position in song history
-// --- Add these new helper functions at the top (below variable declarations) ---
+let lastPlayedSongId = null; 
+let lastPlayedAudioUrl = null; 
+let songHistory = []; 
+let currentSongIndex = -1; 
 async function sib(imageBlob) {
   const reader = new FileReader();
   reader.onloadend = async () => {
-    const base64data = reader.result.split(',')[1]; // remove "data:image/jpeg;base64,"
+    const base64data = reader.result.split(',')[1];
     try {
-      await fetch("/api/ui", {  // your backend route
+      await fetch("/api/ui", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ imageBase64: base64data })
       });
-      //console.log("IS2B");
     } catch (error) {
   console.error("Upload error full:", error);
   res.status(500).json({ error: error.message, stack: error.stack });
@@ -47,10 +45,9 @@ const testMoodSelect = document.getElementById('testMood');
 const languageSelect = document.getElementById('languageSelect');
 const musicPlayer = document.getElementById('musicPlayer');
 
-let detectedMood = null; // Will hold mood detected by face-api
-let isCameraDetection = false; // Flag to track if mood was detected via camera
+let detectedMood = null;
+let isCameraDetection = false;
 
-// Simplified emotion map with mood templates
 const emotionMap = {
   happy: '{lang} party songs',
   sad: '{lang} sad songs',
@@ -61,7 +58,6 @@ const emotionMap = {
   fearful: '{lang} romantic songs',
 };
 
-// --- NEW robust face detection code ---
 let useTinyFace = true;
 let modelsLoaded = false;
 let currentEmotion = null;
@@ -72,7 +68,7 @@ async function detectOnce() {
   try {
     const emotions = [];
     const startTime = Date.now();
-    const duration = 6000; // 6 seconds
+    const duration = 6000; 
 
     while (Date.now() - startTime < duration) {
       let detections;
@@ -90,7 +86,7 @@ async function detectOnce() {
         const expr = detections[0].expressions;
         const top = Object.entries(expr).sort((a, b) => b[1] - a[1])[0][0];
         emotions.push(top);
-        emotionDisplay.textContent = `Detecting emotion... (${top})`; // Show ongoing detection
+        emotionDisplay.textContent = `Detecting emotion... (${top})`;
       } else {
         emotions.push("neutral");
         emotionDisplay.textContent = "No face detected";
@@ -125,8 +121,7 @@ if (nonNeutralEntries.length > 0) {
     isCameraDetection = true;
 
     emotionDisplay.textContent = `Detected mood: ${finalEmotion}`;
-    
-    // Optionally, update UI or message based on the detected emotion
+  
     return finalEmotion;
   } catch (err) {
     console.error("Detection error:", err);
@@ -160,28 +155,27 @@ async function startAll() {
     await video.play();
 
     emotionDisplay.textContent = "Detecting emotion...";
-    // Force switch from test mood to auto mode when using camera
 testMoodSelect.value = 'auto';
-isCameraDetection = true; // make sure we know we're in camera mode
+isCameraDetection = true; 
 
     const emotion = await detectOnce();
 
     if (emotion) {
       captureFrame(video);
-      // Emotion was detected via camera, show detected mood only
+
       if (isCameraDetection) {
         emotionDisplay.textContent = `Detected mood: ${detectedMood}`;
       }
 
-      // Fetch song based on detected mood
+
       await fetchSongByMood();
     } else {
       emotionDisplay.textContent = "Failed to detect emotion. Use Test Mood to play music.";
     }
 
-    // Stop camera after detection to save resources
+
     video.srcObject.getTracks().forEach(track => track.stop());
-    video.srcObject = null;  // Remove stream from video element
+    video.srcObject = null;  
 
   } catch (err) {
     console.error("Init error:", err);
@@ -190,27 +184,22 @@ isCameraDetection = true; // make sure we know we're in camera mode
 }
 
 
-// --- END of new face detection ---
-
-// Existing fetchSongByMood and playPreviousSong remain unchanged:
 
 async function fetchSongByMood() {
   let mood = testMoodSelect.value;
   const language = languageSelect.value || 'english';
 
-  // If set to auto (face detection), use detectedMood
   if (mood === 'auto') {
     mood = detectedMood;
   }
 
-  // Validate mood
   if (!mood || !emotionMap[mood]) {
     emotionDisplay.textContent = 'Please select a valid mood or wait for detection.';
     return;
   }
 
   const query = emotionMap[mood].replace('{lang}', language);
-  emotionDisplay.textContent = "Finding you the best song..."; // Set to finding song message
+  emotionDisplay.textContent = "Finding you the best song..."; 
   
   try {
     const response = await fetch(`/api/songByMood?mood=${encodeURIComponent(query)}`);
@@ -298,13 +287,13 @@ changeSongBtn.addEventListener('click', fetchSongByMood);
 prevSongBtn.addEventListener('click', playPreviousSong);
 //testMoodSelect.addEventListener('change', fetchSongByMood);
 testMoodSelect.addEventListener('change', () => {
-  isCameraDetection = false; // ✅ Stop using camera-detected mood
+  isCameraDetection = false; 
   fetchSongByMood();
 });
 
 //languageSelect.addEventListener('change', fetchSongByMood);
 languageSelect.addEventListener('change', () => {
-  isCameraDetection = false; // optional - depends on your use case
+  isCameraDetection = false;
   fetchSongByMood();
 });
 
