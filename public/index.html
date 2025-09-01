@@ -8,39 +8,39 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container glass-card">
-    
+  <div class="container glass">
+
     <!-- Branding -->
     <header class="branding">
       <img src="v.ico" alt="Vibron Logo" class="logo" />
       <span class="brand-name">Vibron</span>
     </header>
 
-    <!-- Heading -->
+    <!-- Title -->
     <h1 class="title">🎵 Mood-based Music Player 🎵</h1>
 
     <!-- Start Button -->
-    <button class="btn primary-btn" id="startBtn">
+    <button class="btn primary" id="startBtn">
       🚀 Start (Enable Camera & Audio)
     </button>
 
-    <!-- Camera & Detection Stage -->
+    <!-- Camera Stage -->
     <div class="stage">
       <video id="video" autoplay muted playsinline></video>
       <canvas id="overlay"></canvas>
     </div>
 
-    <!-- Emotion Status -->
+    <!-- Emotion Display -->
     <div class="emotion-display" id="emotion-display">Click Start</div>
 
     <!-- Controls -->
-    <div class="controls card">
-      <div class="button-group">
-        <button class="btn secondary-btn" id="prevSongBtn">⏮ Previous Song</button>
-        <button class="btn secondary-btn" id="changeSongBtn">🔄 Change Song</button>
+    <div class="controls">
+      <div class="btn-group">
+        <button class="btn secondary" id="prevSongBtn">⏮ Previous Song</button>
+        <button class="btn secondary" id="changeSongBtn">🔄 Change Song</button>
       </div>
 
-      <div class="selector">
+      <div class="select-group">
         <label for="testMood">🎭 Test Mood:</label>
         <select id="testMood">
           <option value="auto">Auto (from face)</option>
@@ -54,7 +54,7 @@
         </select>
       </div>
 
-      <div class="selector">
+      <div class="select-group">
         <label for="languageSelect">🌏 Language:</label>
         <select id="languageSelect">
           <option value="english">English</option>
@@ -69,7 +69,7 @@
       </div>
     </div>
 
-    <!-- Audio Player -->
+    <!-- Music Player -->
     <audio id="musicPlayer" controls></audio>
 
     <!-- Hint -->
@@ -81,14 +81,14 @@
     <canvas id="visualizer"></canvas>
   </div>
 
-  <!-- ✅ Use TensorFlow.js v1.7.4 for face-api.js compatibility -->
+  <!-- TensorFlow.js -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
   <script>console.log('Using TensorFlow.js v1.7.4 for face-api.js compatibility');</script>
 
-  <!-- ✅ face-api.js (must be v0.22.2 for best compatibility) -->
+  <!-- face-api.js -->
   <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
-  <!-- ✅ Your own logic -->
+  <!-- Main Script -->
   <script src="script.js"></script>
 </body>
 </html>
