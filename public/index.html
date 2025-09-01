@@ -5,124 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vibron Music</title>
   <link rel="icon" type="image/x-icon" href="v.ico" />
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    body {
-      background: linear-gradient(135deg, #1e3a8a, #6b21a8);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Inter', sans-serif;
-      color: #ffffff;
-    }
-    .main-container {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 1.5rem;
-      padding: 2rem;
-      max-width: 800px;
-      width: 100%;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .logo {
-      width: 40px;
-      height: 40px;
-    }
-    .app-title {
-      font-size: 2.5rem;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(to right, #f472b6, #60a5fa);
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      transition: transform 0.2s, background-color 0.3s;
-    }
-    .btn:hover {
-      transform: scale(1.05);
-    }
-    .primary-btn {
-      background: #f472b6;
-      color: white;
-    }
-    .secondary-btn {
-      background: #3b82f6;
-      color: white;
-    }
-    .stage {
-      position: relative;
-      margin: 1.5rem 0;
-      border-radius: 1rem;
-      overflow: hidden;
-    }
-    #video, #overlay {
-      width: 100%;
-      max-height: 300px;
-      border-radius: 1rem;
-    }
-    .emotion {
-      text-align: center;
-      font-size: 1.25rem;
-      padding: 1rem;
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 0.5rem;
-      margin: 1rem 0;
-    }
-    .control-panel {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-    .selector {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    select {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: none;
-    }
-    audio {
-      width: 100%;
-      margin: 1rem 0;
-      filter: brightness(1.2);
-    }
-    .hint {
-      font-size: 0.9rem;
-      opacity: 0.8;
-      text-align: center;
-      margin: 1rem 0;
-    }
-    #visualizer {
-      width: 100%;
-      height: 100px;
-      border-radius: 0.5rem;
-      background: rgba(0, 0, 0, 0.2);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="main-container">
     <!-- Header -->
     <header class="header">
       <img src="v.ico" alt="Vibron Logo" class="logo" />
-      <span class="text-2xl font-semibold">Vibron</span>
+      <span class="text-xl font-semibold">Vibron</span>
     </header>
 
     <!-- Title -->
@@ -144,13 +34,13 @@
 
     <!-- Controls -->
     <div class="control-panel">
-      <div class="flex gap-2">
+      <div class="button-group">
         <button class="btn secondary-btn flex-1" id="prevSongBtn">⏮ Prev</button>
         <button class="btn secondary-btn flex-1" id="changeSongBtn">🔄 Next</button>
       </div>
       <div class="selector">
         <label for="testMood" class="font-medium">🎭 Mood:</label>
-        <select id="testMood" class="flex-1">
+        <select id="testMood">
           <option value="auto">Auto (Face Detection)</option>
           <option value="happy">Happy → Party</option>
           <option value="sad">Sad → Melancholy</option>
@@ -163,7 +53,7 @@
       </div>
       <div class="selector">
         <label for="languageSelect" class="font-medium">🌍 Language:</label>
-        <select id="languageSelect" class="flex-1">
+        <select id="languageSelect">
           <option value="english">English</option>
           <option value="hindi">Hindi</option>
           <option value="kannada">Kannada</option>
