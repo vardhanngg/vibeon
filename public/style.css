@@ -7,37 +7,44 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  overflow: hidden;
 }
-.main-container {
+
+.container {
   max-width: 800px;
   width: 95%;
   padding: 20px;
+}
+
+.glass-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
   border-radius: 20px;
+  padding: 20px;
   box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  display: flex;
-  flex-direction: column;
-  height: 95vh;
-  justify-content: space-between;
 }
-.header {
+
+.branding {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .logo {
   width: 40px;
   height: 40px;
 }
-.app-title {
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.title {
   text-align: center;
   margin-top: 10px;
   color: #ffda77;
-  font-size: 2rem;
-  font-weight: bold;
 }
+
 .btn {
   padding: 10px 20px;
   border-radius: 10px;
@@ -46,77 +53,64 @@ body {
   border: none;
   transition: all 0.3s ease;
 }
-.btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255,255,255,0.3);
-}
+
 .primary-btn {
   background: linear-gradient(90deg, #ff512f, #dd2476);
   color: white;
 }
+
 .secondary-btn {
   background: linear-gradient(90deg, #36d1dc, #5b86e5);
   color: white;
 }
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255,255,255,0.3);
+}
+
 .stage {
+  margin: 20px 0;
   position: relative;
-  margin: 15px 0;
-  border-radius: 12px;
-  flex: 0 0 auto;
 }
-#video, #overlay {
+
+.stage video, .stage canvas {
   width: 100%;
-  max-height: 200px;
   border-radius: 12px;
 }
-.emotion {
+
+.emotion-display {
   text-align: center;
   font-size: 1.2rem;
+  margin: 15px 0;
   padding: 10px;
   background: rgba(255,255,255,0.1);
   border-radius: 8px;
-  margin: 10px 0;
 }
-.control-panel {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin: 10px 0;
-  flex: 0 0 auto;
+
+.controls {
+  margin: 20px 0;
 }
+
 .button-group {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  margin-bottom: 10px;
 }
+
 .selector {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-select {
-  padding: 8px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: none;
-  flex: 1;
-}
-audio {
-  width: 100%;
   margin: 10px 0;
-  filter: brightness(1.2);
 }
+
 .hint {
   font-size: 0.9rem;
   opacity: 0.8;
+  margin-top: 15px;
   text-align: center;
-  margin: 10px 0;
 }
+
 #visualizer {
+  margin-top: 15px;
   width: 100%;
-  height: 100px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  flex: 0 0 auto;
+  height: 150px;
 }
