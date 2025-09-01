@@ -1,36 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!--<link rel="icon" type="image/png" href="v.png" /> -->
   <link rel="icon" type="image/x-icon" href="v.ico" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> Vibron </title>
+  <title>Vibron</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <div class="branding">
-  <img src="v.ico" alt="Vibron Logo" class="logo" />
-  <span class="brand-name">Vibron</span>
-</div>
+  <div class="container glass-card">
+    
+    <!-- Branding -->
+    <header class="branding">
+      <img src="v.ico" alt="Vibron Logo" class="logo" />
+      <span class="brand-name">Vibron</span>
+    </header>
 
-    <h1>🎵 Mood-based-Music-Player 🎵</h1>
-    <button class="primary" id="startBtn">Start (Enable Camera & Audio)</button>
+    <!-- Heading -->
+    <h1 class="title">🎵 Mood-based Music Player 🎵</h1>
 
+    <!-- Start Button -->
+    <button class="btn primary-btn" id="startBtn">
+      🚀 Start (Enable Camera & Audio)
+    </button>
+
+    <!-- Camera & Detection Stage -->
     <div class="stage">
       <video id="video" autoplay muted playsinline></video>
       <canvas id="overlay"></canvas>
     </div>
 
+    <!-- Emotion Status -->
     <div class="emotion-display" id="emotion-display">Click Start</div>
 
-    <div class="controls">
-      <button class="secondary" id="prevSongBtn">Previous Song</button>
-      <button class="secondary" id="changeSongBtn">Change Song</button>
+    <!-- Controls -->
+    <div class="controls card">
+      <div class="button-group">
+        <button class="btn secondary-btn" id="prevSongBtn">⏮ Previous Song</button>
+        <button class="btn secondary-btn" id="changeSongBtn">🔄 Change Song</button>
+      </div>
 
-      <div>
-        <label for="testMood">Test Mood:</label>
+      <div class="selector">
+        <label for="testMood">🎭 Test Mood:</label>
         <select id="testMood">
           <option value="auto">Auto (from face)</option>
           <option value="happy">happy → party</option>
@@ -43,8 +54,8 @@
         </select>
       </div>
 
-      <div>
-        <label for="languageSelect">Language:</label>
+      <div class="selector">
+        <label for="languageSelect">🌏 Language:</label>
         <select id="languageSelect">
           <option value="english">English</option>
           <option value="hindi">Hindi</option>
@@ -58,26 +69,26 @@
       </div>
     </div>
 
+    <!-- Audio Player -->
     <audio id="musicPlayer" controls></audio>
 
+    <!-- Hint -->
     <div class="hint">
-      If camera fails or models aren’t present, choose a test mood to play music anyway.
+      💡 If camera fails or models aren’t present, choose a test mood to play music anyway.
     </div>
 
+    <!-- Visualizer -->
     <canvas id="visualizer"></canvas>
   </div>
 
   <!-- ✅ Use TensorFlow.js v1.7.4 for face-api.js compatibility -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.7.4/dist/tf.min.js"></script>
-  <script>
-    console.log('Using TensorFlow.js v1.7.4 for face-api.js compatibility');
-  </script>
+  <script>console.log('Using TensorFlow.js v1.7.4 for face-api.js compatibility');</script>
 
   <!-- ✅ face-api.js (must be v0.22.2 for best compatibility) -->
   <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
 
-  <!-- ✅ Your own logic using local models in script.js -->
+  <!-- ✅ Your own logic -->
   <script src="script.js"></script>
 </body>
 </html>
-  
