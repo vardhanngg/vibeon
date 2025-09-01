@@ -4,6 +4,8 @@ import express from 'express';
 
 const { PLAYLIST_SEARCH_ENDPOINT, PLAYLIST_SONGS_ENDPOINT, SEARCH_ENDPOINT } = require('../public/config');
 ;
+import { PLAYLIST_SEARCH_ENDPOINT, PLAYLIST_SONGS_ENDPOINT, SEARCH_ENDPOINT } from '../public/config';
+;
 
 module.exports = async function handler(req, res) {
   // Ensure JSON response
