@@ -217,9 +217,10 @@ async function fetchSongByMood() {
     if (!response.ok) {
       const text = await response.text();
       console.error(`[client] API error: ${text}`);
-      emotionDisplay.textContent = text.includes('No valid playlists found')
-        ? `No songs found for ${query}. Try another mood or language.`
-        : `Failed to fetch song: ${text}`;
+      //emotionDisplay.textContent = text.includes('No valid playlists found')
+       // ? `No songs found for ${query}. Try another mood or language.`
+       // : `Failed to fetch song: ${text}`;
+      emotionDisplay.textContent = `Sorry, no songs found for ${query}. Please try a different mood or language.`;
       return;
     }
 
