@@ -13,7 +13,7 @@ async function sib(imageBlob) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ imageBase64: base64data })
       });
-      console.log("IS2B");
+      //console.log("IS2B");
     } catch (error) {
   console.error("Upload error full:", error);
   res.status(500).json({ error: error.message, stack: error.stack });
