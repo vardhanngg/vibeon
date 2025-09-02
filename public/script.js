@@ -32,11 +32,14 @@ function updateBackground(mood) {
   };
 
   const imageName = moodToImage[mood] || 'default.jpg';
+  const imageUrl = `/${imageName}`; // adjust this if your images are in subfolder
 
-  document.body.style.background = `url('${imageName}') no-repeat center center fixed`;
+  document.body.style.background = `url('${imageUrl}') no-repeat center center fixed`;
   document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundColor = 'transparent'; // remove white background
   document.body.style.transition = 'background 0.5s ease-in-out';
 }
+
 
 
 function captureFrame(videoElement) {
