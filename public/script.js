@@ -132,7 +132,7 @@ if (nonNeutralEntries.length > 0) {
 }
 
     currentEmotion = finalEmotion;
-    updateBackground(finalEmotion);
+    //updateBackground(finalEmotion);
 
     
     // Display detected emotion only if camera detection
@@ -218,6 +218,7 @@ async function fetchSongByMood() {
   }
 
   const query = emotionMap[mood].replace('{lang}', language);
+   updateBackground(mood);
   emotionDisplay.textContent = "Finding you the best song..."; 
   
   try {
@@ -307,7 +308,7 @@ prevSongBtn.addEventListener('click', playPreviousSong);
 //testMoodSelect.addEventListener('change', fetchSongByMood);
 testMoodSelect.addEventListener('change', () => {
   isCameraDetection = false; 
-  updateBackground(finalEmotion);
+ // updateBackground(finalEmotion);
   fetchSongByMood();
 });
 
