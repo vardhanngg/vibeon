@@ -156,6 +156,7 @@ video,
 
 h1,
 .emotion-display,
+label,
 #testMood,
 #languageSelect,
 #musicPlayer {
@@ -169,3 +170,10 @@ h1,
   border: 1px solid white;
   border-radius: 6px;
 }
+
+#testMood option,
+#languageSelect option {
+  background-color: #000;
+  color: white;
+}
+
