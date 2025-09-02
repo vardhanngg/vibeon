@@ -170,7 +170,10 @@ label,
  /* border: 1px solid white;*/
   border-radius: 0px;
 }
-
+#musicPlayer {
+  background-color: transparent; 
+  border-radius: 0px;
+}
 #testMood option,
 #languageSelect option {
   background-color: #000;
