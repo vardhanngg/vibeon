@@ -31,7 +31,7 @@ function updateBackground(mood) {
     fearful: 'romantic.jpg'
   };
 
-  const imageName = moodToImage[mood] || 'default.jpg';
+  const imageName = moodToImage[mood] || 'default.png';
   const imageUrl = `/public/${imageName}`; // adjust this if your images are in subfolder
 
   document.body.style.background = `url('${imageUrl}') no-repeat center center fixed`;
