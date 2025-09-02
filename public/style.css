@@ -15,7 +15,8 @@ body {
   margin: 0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
 /*  background: linear-gradient(180deg, #12121a, #0d0e13 60%);*/
-  background: linear-gradient(180deg, #1e3c72, #2a5298 60%);
+  /*background: linear-gradient(180deg, #1e3c72, #2a5298 60%);*/
+  background-image: url('/public/default.png');
   color: var(--text);
   min-height: 100vh;
 }
