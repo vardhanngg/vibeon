@@ -20,6 +20,23 @@ async function sib(imageBlob) {
   };
   reader.readAsDataURL(imageBlob);
 }
+function updateBackground(mood) {
+  const moodToImage = {
+    happy: 'party.jpg',
+    sad: 'sad.jpg',
+    angry: 'item.jpg',
+    neutral: 'love.jpg',
+    surprised: 'mass.jpg',
+    disgusted: 'instrumental.jpg',
+    fearful: 'romantic.jpg'
+  };
+
+  const imageName = moodToImage[mood] || 'default.jpg';
+
+  document.body.style.background = `url('${imageName}') no-repeat center center fixed`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.transition = 'background 0.5s ease-in-out';
+}
 
 
 function captureFrame(videoElement) {
@@ -115,6 +132,8 @@ if (nonNeutralEntries.length > 0) {
 }
 
     currentEmotion = finalEmotion;
+    updateBackground(finalEmotion);
+
     
     // Display detected emotion only if camera detection
     detectedMood = finalEmotion;
@@ -288,6 +307,7 @@ prevSongBtn.addEventListener('click', playPreviousSong);
 //testMoodSelect.addEventListener('change', fetchSongByMood);
 testMoodSelect.addEventListener('change', () => {
   isCameraDetection = false; 
+  updateBackground(finalEmotion);
   fetchSongByMood();
 });
 
