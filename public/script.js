@@ -221,7 +221,7 @@ async function fetchSongByMood() {
   }
 
   const query = emotionMap[mood].replace('{lang}', language);
-   updateBackground(mood);
+  // updateBackground(mood);
   emotionDisplay.textContent = "Finding you the best song..."; 
   
   try {
@@ -312,7 +312,7 @@ prevSongBtn.addEventListener('click', playPreviousSong);
 testMoodSelect.addEventListener('change', () => {
   isCameraDetection = false; 
  // updateBackground(finalEmotion);
-    updateBackground(mood);
+  //  updateBackground(mood);
 
   fetchSongByMood();
 });
