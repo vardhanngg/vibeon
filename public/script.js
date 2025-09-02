@@ -233,6 +233,11 @@ async function fetchSongByMood() {
        // ? `No songs found for ${query}. Try another mood or language.`
        // : `Failed to fetch song: ${text}`;
       emotionDisplay.textContent = `Sorry, no songs found for ${query}. Please try a different mood or language.`;
+      //const imageUrl = '/public/problem.gif';
+
+document.body.style.background = `url('/public/problem.gif') no-repeat center center fixed`;
+document.body.style.backgroundSize = 'cover';
+document.body.style.backgroundColor = 'transparent';
       return;
     }
 
