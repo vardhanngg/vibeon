@@ -82,7 +82,7 @@ h1 {
   margin: 22px auto 8px;
   width: min(300px, 90vw);
   height: min(300px, 90vw);
-  background: #000;
+  /*background: #000;*/
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
