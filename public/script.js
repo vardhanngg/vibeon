@@ -309,6 +309,8 @@ prevSongBtn.addEventListener('click', playPreviousSong);
 testMoodSelect.addEventListener('change', () => {
   isCameraDetection = false; 
  // updateBackground(finalEmotion);
+    updateBackground(mood);
+
   fetchSongByMood();
 });
 
