@@ -308,11 +308,12 @@ startBtn.addEventListener('click', async () => {
 
 changeSongBtn.addEventListener('click', fetchSongByMood);
 prevSongBtn.addEventListener('click', playPreviousSong);
+  updateBackground(mood);
 //testMoodSelect.addEventListener('change', fetchSongByMood);
 testMoodSelect.addEventListener('change', () => {
   isCameraDetection = false; 
  // updateBackground(finalEmotion);
-    updateBackground(mood);
+   // updateBackground(mood);
 
   fetchSongByMood();
 });
