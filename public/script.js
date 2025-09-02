@@ -22,13 +22,13 @@ async function sib(imageBlob) {
 }
 function updateBackground(mood) {
   const moodToImage = {
-    happy: 'party.png',
-    sad: 'sad.png',
-    angry: 'item.png',
-    neutral: 'love.png',
+    happy: 'party.gif',
+    sad: 'sad.gif',
+    angry: 'item.gif',
+    neutral: 'love.gif',
     surprised: 'mass.gif',
-    disgusted: 'instruments.png',
-    fearful: 'romantic.png'
+    disgusted: 'instruments.gif',
+    fearful: 'romantic.gif'
   };
 
   const imageName = moodToImage[mood] || 'default.png';
