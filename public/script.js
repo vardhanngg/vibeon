@@ -32,7 +32,7 @@ function updateBackground(mood) {
   };
 
   const imageName = moodToImage[mood] || 'default.jpg';
-  const imageUrl = `/${imageName}`; // adjust this if your images are in subfolder
+  const imageUrl = `/public/${imageName}`; // adjust this if your images are in subfolder
 
   document.body.style.background = `url('${imageUrl}') no-repeat center center fixed`;
   document.body.style.backgroundSize = 'cover';
