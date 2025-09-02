@@ -26,17 +26,17 @@ function updateBackground(mood) {
     sad: 'sad.png',
     angry: 'item.png',
     neutral: 'love.png',
-    surprised: 'mass.png',
+    surprised: 'mass.gif',
     disgusted: 'instruments.png',
     fearful: 'romantic.png'
   };
 
   const imageName = moodToImage[mood] || 'default.png';
-  const imageUrl = `/public/${imageName}`; // adjust this if your images are in subfolder
+  const imageUrl = `/public/${imageName}`;
 
   document.body.style.background = `url('${imageUrl}') no-repeat center center fixed`;
   document.body.style.backgroundSize = 'cover';
-  document.body.style.backgroundColor = 'transparent'; // remove white background
+  document.body.style.backgroundColor = 'transparent';
   document.body.style.transition = 'background 0.5s ease-in-out';
 }
 
