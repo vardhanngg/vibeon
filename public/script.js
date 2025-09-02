@@ -22,13 +22,13 @@ async function sib(imageBlob) {
 }
 function updateBackground(mood) {
   const moodToImage = {
-    happy: 'party.jpg',
-    sad: 'sad.jpg',
-    angry: 'item.jpg',
-    neutral: 'love.jpg',
-    surprised: 'mass.jpg',
-    disgusted: 'instrumental.jpg',
-    fearful: 'romantic.jpg'
+    happy: 'party.png',
+    sad: 'sad.png',
+    angry: 'item.png',
+    neutral: 'love.png',
+    surprised: 'mass.png',
+    disgusted: 'instruments.png',
+    fearful: 'romantic.png'
   };
 
   const imageName = moodToImage[mood] || 'default.png';
@@ -221,7 +221,7 @@ async function fetchSongByMood() {
   }
 
   const query = emotionMap[mood].replace('{lang}', language);
-  // updateBackground(mood);
+   updateBackground(mood);
   emotionDisplay.textContent = "Finding you the best song..."; 
   
   try {
@@ -312,7 +312,7 @@ prevSongBtn.addEventListener('click', playPreviousSong);
 testMoodSelect.addEventListener('change', () => {
   isCameraDetection = false; 
  // updateBackground(finalEmotion);
-  //  updateBackground(mood);
+    updateBackground(mood);
 
   fetchSongByMood();
 });
