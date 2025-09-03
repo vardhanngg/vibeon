@@ -88,7 +88,7 @@ async function detectOnce() {
   try {
     const emotions = [];
     const startTime = Date.now();
-    const duration = 3000; 
+    const duration = 2000; 
 
     while (Date.now() - startTime < duration) {
       let detections;
