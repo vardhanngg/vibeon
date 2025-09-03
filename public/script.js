@@ -330,5 +330,7 @@ languageSelect.addEventListener('change', () => {
 });
 
 musicPlayer.addEventListener('ended', () => {
+    console.log("Song ended, fetching next song...");
+  emotionDisplay.textContent = "Loading next song...";
   fetchSongByMood();
 });
