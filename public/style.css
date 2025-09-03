@@ -148,11 +148,22 @@ video,
   object-fit: contain;
 }
 
+/*.brand-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+}*/
 .brand-name {
   font-size: 1.4rem;
   font-weight: 700;
   color: var(--text);
+  text-shadow: 
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
 }
+
 
 h1,
 .emotion-display,
