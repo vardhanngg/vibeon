@@ -280,11 +280,16 @@ document.body.style.backgroundColor = 'transparent';
 
     // Show both detected mood and song info
    // emotionDisplay.textContent = `Detected Mood: ${mood} → Playing: ${song.title} by ${song.artist}`;
-    if (isCameraDetection) {
-  emotionDisplay.textContent = `Detected Mood: ${detectedMood} → Playing: ${song.title} by ${song.artist}`;
-} else {
-  emotionDisplay.textContent = `Test Mood: ${mood} → Playing: ${song.title} by ${song.artist}`;
-}
+  //  if (isCameraDetection) {
+ // emotionDisplay.textContent = `Detected Mood: ${detectedMood} → Playing: ${song.title} by ${song.artist}`;
+//} else {
+ // emotionDisplay.textContent = `Test Mood: ${mood} → Playing: ${song.title} by ${song.artist}`;
+//}
+    const sourceMood = testMoodSelect.value === 'auto' ? detectedMood : testMoodSelect.value;
+const moodSource = testMoodSelect.value === 'auto' ? 'Detected Mood' : 'Test Mood';
+
+emotionDisplay.textContent = `${moodSource}: ${sourceMood} → Playing: ${song.title} by ${song.artist}`;
+
 
   } catch (error) {
     console.error('[client] Error fetching song:', error.message);
