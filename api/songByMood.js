@@ -55,7 +55,7 @@ module.exports = async function handler(req, res) {
     }
     lastPlaylistId = selectedPlaylists[0].id; // Update lastPlaylistId to first selected
 
-    // Step 3: Fetch songs from selected playlists
+    // Step 3: Fetch songs from selected playlists with pagination
     let allSongs = [];
     for (const playlist of selectedPlaylists) {
       const playlistId = playlist.id;
@@ -64,21 +64,24 @@ module.exports = async function handler(req, res) {
         continue;
       }
       console.log(`[server] Fetching songs for playlist ID: ${playlistId}, Name: ${playlist.name}`);
-      try {
-        const playlistRes = await axios.get(`${PLAYLIST_SONGS_ENDPOINT}?id=${encodeURIComponent(playlistId)}&page=0&limit=50`);
-        if (!playlistRes.data || playlistRes.data.success === false) {
-          console.error(`[server] Playlist songs API returned error: ${JSON.stringify(playlistRes.data.message || playlistRes.data)}`);
-          continue;
+      for (let page = 0; page < 3; page++) {
+        try {
+          const playlistRes = await axios.get(`${PLAYLIST_SONGS_ENDPOINT}?id=${encodeURIComponent(playlistId)}&page=${page}&limit=50`);
+          if (!playlistRes.data || playlistRes.data.success === false) {
+            console.error(`[server] Playlist songs API returned error for ID ${playlistId}, page ${page}: ${JSON.stringify(playlistRes.data.message || playlistRes.data)}`);
+            break;
+          }
+          const songs = playlistRes.data.data?.songs || [];
+          if (!Array.isArray(songs)) {
+            console.error(`[server] Invalid playlist songs response structure for ID ${playlistId}, page ${page}: ${JSON.stringify(playlistRes.data)}`);
+            break;
+          }
+          allSongs = allSongs.concat(songs);
+          if (songs.length < 50) break; // Stop if fewer songs than limit
+        } catch (apiErr) {
+          console.error(`[server] Playlist songs API error for ID ${playlistId}, page ${page}: ${apiErr.message}`);
+          break;
         }
-        const songs = playlistRes.data.data?.songs || [];
-        if (!Array.isArray(songs)) {
-          console.error(`[server] Invalid playlist songs response structure: ${JSON.stringify(playlistRes.data)}`);
-          continue;
-        }
-        allSongs = allSongs.concat(songs);
-      } catch (apiErr) {
-        console.error(`[server] Playlist songs API error for ID ${playlistId}: ${apiErr.message}`);
-        continue;
       }
     }
 
