@@ -64,7 +64,7 @@ lastPlaylistId = selectedPlaylist.id;
     // Step 3: Fetch songs from the selected playlist
     let playlistRes;
     try {
-      playlistRes = await axios.get(`${PLAYLIST_SONGS_ENDPOINT}?id=${encodeURIComponent(playlistId)}&page=0&limit=10`);
+      playlistRes = await axios.get(`${PLAYLIST_SONGS_ENDPOINT}?id=${encodeURIComponent(playlistId)}&page=0&limit=50`);
     } catch (apiErr) {
       console.error(`[server] Playlist songs API error for ID ${playlistId}: ${apiErr.message}`);
       throw new Error(`Playlist songs fetch failed: ${apiErr.message}`);
