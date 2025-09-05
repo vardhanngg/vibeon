@@ -259,3 +259,16 @@ musicPlayer.addEventListener('ended', async () => {
   emotionDisplay.textContent = "Loading next song...";
   await fetchSongByMood();
 });
+musicPlayer.addEventListener('pause', () => {
+  // Show pause.gif when paused
+  document.body.style.background = `url('/public/pause.gif') no-repeat center center fixed`;
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundColor = 'transparent';
+});
+
+musicPlayer.addEventListener('play', () => {
+  // Restore the mood-based GIF when playing
+  const mood = testMoodSelect.value === 'auto' ? detectedMood : testMoodSelect.value;
+  updateBackground(mood);
+});
+
