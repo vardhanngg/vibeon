@@ -18,20 +18,7 @@
 
 
 
-<script>
-  const btn = document.getElementById('showFormBtn');
-  const formContainer = document.getElementById('suggestion-form-container');
 
-  btn.addEventListener('click', () => {
-    if (formContainer.style.display === 'none') {
-      formContainer.style.display = 'block';
-      btn.textContent = 'Hide Feedback Form';
-    } else {
-      formContainer.style.display = 'none';
-      btn.textContent = 'Give Feedback';
-    }
-  });
-</script>
 
 
     <!---->
@@ -88,6 +75,20 @@
 <div id="suggestion-form-container" style="display:none;">
   <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSedknk6eJxyXbHGkXWMJLbLQnLJOFX0br-4gc8Trp1_OdN2mA/viewform?usp=header?embedded=true" width="640" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
 </div>
+    <script>
+  const btn = document.getElementById('showFormBtn');
+  const formContainer = document.getElementById('suggestion-form-container');
+
+  btn.addEventListener('click', () => {
+    if (formContainer.style.display === 'none') {
+      formContainer.style.display = 'block';
+      btn.textContent = 'Hide Feedback Form';
+    } else {
+      formContainer.style.display = 'none';
+      btn.textContent = 'Give Feedback';
+    }
+  });
+</script>
 
     <!--<canvas id="visualizer"></canvas>-->
   </div>
